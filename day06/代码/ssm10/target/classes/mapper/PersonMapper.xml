@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.dao.PersonMapper">
+  <resultMap id="BaseResultMap" type="com.xiaoshu.entity.Person">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="express_name" jdbcType="VARCHAR" property="expressName" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="express_trait" jdbcType="VARCHAR" property="expressTrait" />
+    <result column="entry_time" jdbcType="DATE" property="entryTime" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="express_type_id" jdbcType="INTEGER" property="expressTypeId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, express_name, sex, express_trait, entry_time, create_time, express_type_id
+  </sql>
+ <select id="findPage" parameterType="personVo" resultType="personVo">
+ SELECT p.*,c.express_name AS cname FROM express_company c,express_person p 
+ <where>
+ p.express_type_id=c.id
+ <if test="expressName!=null and expressName!=''">
+ and p.express_name like '%${expressName}%'
+ </if>
+ <if test="expressTypeId!=null and expressTypeId!=0">
+ and p.express_type_id =#{expressTypeId}
+ </if>
+ <if test="start!=null">
+ and p.entry_time &gt;=#{start}
+ </if>
+ <if test="end!=null">
+  and p.entry_time &lt;=#{end}
+ </if>
+ 
+ </where>
+ </select>
+</mapper>
